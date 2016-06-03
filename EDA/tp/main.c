@@ -48,7 +48,10 @@ int main()
     FILE* file2 = fopen("libros.txt","r");
     if(file1 == NULL )
     {
-        printf("Error al abrir el archivo");
+        printf("Error al abrir el archivo 1\n");
+    }
+    if(file2==NULL){
+        printf("Error al abrir el archivo 2\n");
     }
     char** authorNames;
     authorNames = getAuthors(file1);
@@ -230,9 +233,7 @@ char** getAutorLibros(FILE* file,char *autor)
             }
             books[i][j]='\0';
             hasBooks = 1;
-            //printf("dentro de funcion:%s\n",books[i]);
             books[i+1]="X";
-            //printAuthors(books);
             finish=1;
         }
         while(!finish && (c=fgetc(file))!= '.')   // saltea los libros que no me interesan
@@ -277,7 +278,6 @@ void insertarLibros(nodo *nodo,char *author,FILE *file)
     }
     else
         nodo->books=NULL;
-
 }
 
 int isLetter(char *c)
@@ -314,7 +314,6 @@ char* toUpper(char autor[NAME_LENGTH])
 
 void mostrarAutores(nodo *autores)
 {
-
     if(autores->sigAuth==NULL)
     {
         return;
@@ -326,12 +325,10 @@ void mostrarAutores(nodo *autores)
         printf("\n");
         mostrarAutores(autores->sigAuth);
     }
-
 }
 
 void myMostrar(char *text)
 {
-
     int i;
     for(i=0; text[i]!='\0'; i++)
     {
@@ -351,7 +348,6 @@ void mostrarLibros(nodosec *books)
     }
     else
     {
-        //printf("Libro: %s\n",books->title);
         mostrarLibros(books->sigBook);
     }
 }
@@ -377,7 +373,6 @@ void insertAuthor(nodo *multiList,char* author)
 
 void insertBook(nodo* multiList,char *author,char *book)
 {
-
     nodo *aux=multiList;
     while(strcmp(aux->nombreAutor,"X")!=0 && strcmp(toUpper(aux->nombreAutor),toUpper(author))!=0 )
     {
@@ -404,8 +399,9 @@ void insertBook(nodo* multiList,char *author,char *book)
             aux->books->sigBook = NULL;
         }
         printf("El libro se agrego correctamente!\n");
+    }else{
+        printf("El autor no existe\n");
     }
-
 }
 
 void getText(char *text)
@@ -422,7 +418,6 @@ void getText(char *text)
 
 void deleteBook(nodo* multiList,char *author,char *book)
 {
-
     nodo *aux=multiList;
     while(strcmp(aux->nombreAutor,"X")!=0 && strcmp(toUpper(aux->nombreAutor),toUpper(author))!=0 )
     {
@@ -444,7 +439,8 @@ void deleteBook(nodo* multiList,char *author,char *book)
                 antBook->sigBook = auxBooks->sigBook;
                 free(auxBooks);
                 printf("El libro ah sido destruido!\n");
-            }else
+            }
+            else
                 printf("El libro no se encuentra en los registros");
         }
         else
@@ -457,7 +453,6 @@ void deleteBook(nodo* multiList,char *author,char *book)
 
 nodo* deleteAuthor(nodo *authors,char *authorName)
 {
-
     nodo *aux=authors;
     nodo *ant=authors;
     int head=1;
@@ -470,9 +465,12 @@ nodo* deleteAuthor(nodo *authors,char *authorName)
 
     if(strcmp(toUpper(aux->nombreAutor),toUpper(authorName))==0)
     {
-        if(head){
+        if(head)
+        {
             ant = authors->sigAuth;
-        }else{
+        }
+        else
+        {
             ant->sigAuth= aux->sigAuth;
         }
         freeBooks(aux->books);
@@ -483,12 +481,15 @@ nodo* deleteAuthor(nodo *authors,char *authorName)
     return ant;
 }
 
-void freeBooks(nodosec* books){
-
-    if(books->sigBook==NULL){
+void freeBooks(nodosec* books)
+{
+    if(books->sigBook==NULL)
+    {
         return;
-    }else{
-    freeBooks(books->sigBook);
+    }
+    else
+    {
+        freeBooks(books->sigBook);
     }
     free(books);
 }
