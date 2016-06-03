@@ -52,8 +52,7 @@ int main()
     }
     char** authorNames;
     authorNames = getAuthors(file1);
-    //printAuthors(authorNames);
-    //char **books=getAutorLibros(file2,"patrick rothfuss");
+
     printf("Lista:\n");
     ingresarAutores(file1,file2,authors,authorNames);
     printf("------------------\n");
@@ -175,7 +174,6 @@ void ingresarAutores(FILE *file,FILE *file2,nodo* autores,char** authorName)
     }
     else
     {
-        //autores->books = (nodosec*)malloc(sizeof(nodosec));
         insertarLibros(autores,*authorName,file2);
         autores->sigAuth = (nodo*) malloc(sizeof(nodo));
         ingresarAutores(file,file2,autores->sigAuth,authorName+1);
@@ -198,10 +196,8 @@ char** getAutorLibros(FILE* file,char *autor)
     int index=0;
     int anotherWord=0;
     int hasBooks=0;
-    char *name,*lastName,*result;
-    //name = (char*)malloc(sizeof(char)*30);
+
     int finish=0;
-    //lastName = (char*)malloc(sizeof(char)*30);
     i=0;
     j=0;
     while((c=fgetc(file))!= EOF && !finish)
@@ -257,9 +253,6 @@ void insertarLibros(nodo *nodo,char *author,FILE *file)
     int i;
     if(books!=NULL)
     {
-        //strcpy(nodo->books->title,books[0]);
-        // nodosec *aux;//=nodo->books->sigBook;
-        //nodo->books->sigBook = aux;
         nodosec *n;
         int first=1;
         for(i=0; strcmp(books[i],"X")!=0; i++)
@@ -277,54 +270,16 @@ void insertarLibros(nodo *nodo,char *author,FILE *file)
                 n =(nodosec*) malloc(sizeof(nodosec));
 
                 strcpy(n->title,books[i]);
-                //aux->sigBook = (nodosec*) malloc(sizeof(nodosec));
-                //aux = aux->sigBook;
-
                 n->sigBook = nodo->books;
                 nodo->books = n;
-
             }
-
         }
-        //aux= NULL;
     }
     else
         nodo->books=NULL;
 
 }
-/*
-void ingresarinmuebles(nodo *authors,char **books)
-{
 
-    nodosec *nuevo;
-	// en caso de ingresar un X corto la ejecucion, no tiene sentido preguntar
-	// por mas datos
-	if (strcmp(*books, "X") == 0)
-		{
-		return;
-		}
-	else
-		{
-		// empiezo a guardar los valores
-		// si es el primero que ingreso el siginm deberia ser distinto de NULL
-		if (authors->books->sigBook!= NULL)
-			{
-			strcpy(authors->books->title, *books);
-			authors->books->sigBook=NULL;
-			}
-		else // Caso contrario debo crear uno nuevo que va a quedar entre el
-		// anterior ingresado y el primero al que apunta nodo
-			{
-			nuevo=(nodosec *)malloc(sizeof(nodosec));
-			strcpy(nuevo->title, *books);
-			nuevo->sigBook=authors->books;
-			authors->books=nuevo;
-			}
-		ingresarinmuebles(authors,books+1);
-		}
-}
-
-*/
 int isLetter(char *c)
 {
     int ans=0;
@@ -411,12 +366,12 @@ void insertAuthor(nodo *multiList,char* author)
         ant = aux;
         aux = aux->sigAuth;
     }
-    printf("el nodo actual es: %s\n",aux->nombreAutor);
     n = (nodo*) malloc(sizeof(nodo));
     strcpy(n->nombreAutor,author);
+    n->books=NULL;
     n->sigAuth = aux;
     ant->sigAuth = n;
-    //aux->sigAuth->books = NULL;
+
     printf("El autor se agrego correctamente\n");
 }
 
