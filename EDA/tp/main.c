@@ -491,6 +491,7 @@ void freeBooks(nodosec* books)
     else
     {
         freeBooks(books->sigBook);
+        free(books);
     }
-    free(books);
+
 }
