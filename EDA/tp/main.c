@@ -339,7 +339,7 @@ void myMostrar(char *text)
 void mostrarLibros(nodosec *books)
 {
     if(books!=NULL)
-        printf("Libro: %s\n",books->title);
+        printf("-->Libro: %s\n",books->title);
     if(books==NULL)
         return;
     if(books->sigBook == NULL)
@@ -475,6 +475,7 @@ nodo* deleteAuthor(nodo *authors,char *authorName)
         }
         freeBooks(aux->books);
         free(aux);
+        printf("El autor a sido destruido!\n");
     }
     else
         printf("No existe el autor\n");
