@@ -26,7 +26,7 @@ typedef struct book
 } nodosec;
 
 nodo* deleteAuthor(nodo *authors,char *author);
-void deleteBook(nodo* multiList,char *author,char *book);
+nodosec* deleteBook(nodo* multiList,char *author,char *book);
 void ingresarinmuebles(nodo *authors,char **books);
 void mostrarLibros(nodosec *books);
 void mostrarAutores(nodo *autores);
@@ -39,6 +39,7 @@ void ingresarAutores(FILE *file,FILE* file2,nodo* autores,char** authorName);
 void  insertarLibros(nodo *nodo,char *author,FILE *file);
 void insertAuthor(nodo *multiList,char* author);
 void freeBooks(nodosec* books);
+void getText(char *text);
 
 
 int main()
@@ -395,7 +396,7 @@ void insertBook(nodo* multiList,char *author,char *book)
         else
         {
             aux->books = (nodosec*) malloc(sizeof(nodosec));
-            aux->books = book;
+            strcpy(aux->books->title,book);
             aux->books->sigBook = NULL;
         }
         printf("El libro se agrego correctamente!\n");
@@ -406,19 +407,21 @@ void insertBook(nodo* multiList,char *author,char *book)
 
 void getText(char *text)
 {
-    char c;
+    /*char c;
     int i=0;
     while((c=getchar())!='9')
     {
         if(isLetter(c))
             text[i++]=c;
-    }
-    text[i]='\0';
+    }*/
+    scanf(" %[^\n]",text);
+   // text[i]='\0';
 }
 
-void deleteBook(nodo* multiList,char *author,char *book)
+nodosec* deleteBook(nodo* multiList,char *author,char *book)
 {
     nodo *aux=multiList;
+    nodosec* head = multiList->books;
     while(strcmp(aux->nombreAutor,"X")!=0 && strcmp(toUpper(aux->nombreAutor),toUpper(author))!=0 )
     {
         aux = aux->sigAuth;
@@ -429,15 +432,22 @@ void deleteBook(nodo* multiList,char *author,char *book)
         if(aux->books!=NULL)
         {
             nodosec *antBook;
-            while(strcmp(toUpper(auxBooks->title),toUpper(book))!=0)
+            int headBook=1;
+            while(strcmp(toUpper(auxBooks->title),toUpper(book))!=0 && auxBooks->sigBook!=NULL)
             {
                 antBook = auxBooks;
                 auxBooks = auxBooks->sigBook;
+                headBook=0;
             }
             if(strcmp(toUpper(auxBooks->title),toUpper(book))==0)
             {
+                if(head){
+                    aux->books = auxBooks->sigBook;
+                    free(auxBooks);
+                }else{
                 antBook->sigBook = auxBooks->sigBook;
                 free(auxBooks);
+                }
                 printf("El libro ah sido destruido!\n");
             }
             else
@@ -473,7 +483,8 @@ nodo* deleteAuthor(nodo *authors,char *authorName)
         {
             ant->sigAuth= aux->sigAuth;
         }
-        freeBooks(aux->books);
+        if(aux->books!=NULL)
+            freeBooks(aux->books);
         free(aux);
         printf("El autor a sido destruido!\n");
     }
